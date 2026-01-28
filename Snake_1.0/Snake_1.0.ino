@@ -12,11 +12,7 @@ int ya = random(0,7);
 int game = 1;
 
 void move(){
-  for(int i = length-1; i>0; i--){
-    if(SnakeX[0] == SnakeX[i] && SnakeY[0] == SnakeY[i]){
-      game = 0;
-    }
-  }
+  
   if(SnakeX[0] > 7) SnakeX[0] = 0;
   if(SnakeY[0] > 7) SnakeY[0] = 0;
   if(SnakeX[0] < 0) SnakeX[0] = 7;
@@ -45,7 +41,11 @@ void move(){
     lc.setLed(0, SnakeX[i], SnakeY[i], true);
   }
 
-  
+  for(int i = length-1; i>0; i--){
+    if(SnakeX[0] == SnakeX[i] && SnakeY[0] == SnakeY[i]){
+      game = 0;
+    }
+  }
 
 
 }
