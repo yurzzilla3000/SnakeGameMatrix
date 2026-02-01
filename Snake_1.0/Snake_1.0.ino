@@ -1,41 +1,47 @@
 
 #include <LedControl.h>
 LedControl lc = LedControl(6,3,5, 1);
-signed int SnakeX[64];
-signed int SnakeY[64];
 int length = 3;
 int direction = 0;
 int xa, ya, r, r2;
 int game = 1;
 
-void move(){
-  if(SnakeX[0] > 7) SnakeX[0] = 0;
-  if(SnakeY[0] > 7) SnakeY[0] = 0;
-  if(SnakeX[0] < 0) SnakeX[0] = 7;
-  if(SnakeY[0] < 0) SnakeY[0] = 7;
 
-  lc.setLed(0, SnakeX[0], SnakeY[0], true);
+struct Point{
+  int x;
+  int y;
+};
+
+Point Snake[64];
+
+void move(){
+  if(Snake[0].x > 7) Snake[0].x = 0;
+  if(Snake[0].y > 7) Snake[0].y = 0;
+  if(Snake[0].x < 0) Snake[0].x = 7;
+  if(Snake[0].y < 0) Snake[0].y = 7;
+
+  lc.setLed(0, Snake[0].x, Snake[0].y, true);
   for(int i = length; i>0; i--){
-    SnakeX[i] = SnakeX[i-1];
-    SnakeY[i] = SnakeY[i-1];
+    Snake[i].x = Snake[i-1].x;
+    Snake[i].y = Snake[i-1].y;
   }
 
   if(direction == 0){
-    SnakeY[0] += 1;
+    Snake[0].y += 1;
   }if(direction == 1){
-    SnakeY[0] -= 1;
+    Snake[0].y -= 1;
   }if(direction == 2){
-    SnakeX[0] += 1;
+    Snake[0].x += 1;
   }if(direction == 3){
-    SnakeX[0] -= 1;
+    Snake[0].x -= 1;
   }
   
   lc.clearDisplay(0);
   for(int i = 0; i < length; i++){
-    lc.setLed(0, SnakeX[i], SnakeY[i], true);
+    lc.setLed(0, Snake[i].x, Snake[i].y, true);
   }
   for(int i = length-1; i>0; i--){
-    if(SnakeX[0] == SnakeX[i] && SnakeY[0] == SnakeY[i]){
+    if(Snake[0].x == Snake[i].x && Snake[0].y == Snake[i].y){
       game = 0;
     }
   }
@@ -53,12 +59,12 @@ void setup() {
   lc.setIntensity(0, 10);   
   lc.clearDisplay(0);
 
-  SnakeX[0] = 2;
-  SnakeY[0] = 3;
-  SnakeX[1] = 1;
-  SnakeY[1] = 3;
-  SnakeX[2] = 0;
-  SnakeY[2] = 3;
+  Snake[0].x = 2;
+  Snake[0].y = 3;
+  Snake[1].x = 1;
+  Snake[1].y = 3;
+  Snake[2].x = 0;
+  Snake[2].y = 3;
 }
 
 void loop() {
@@ -66,12 +72,12 @@ void loop() {
   if(game){ 
     lc.setLed(0,xa,ya, true);
     for(int i = length-1; i>0; i--){
-      if(xa==SnakeX[i] && ya==SnakeY[i]){
+      if(xa==Snake[i].x && ya==Snake[i].y){
         xa=random(0,7);
         ya=random(0,7);
       }
     }
-    if(SnakeX[0] == xa && SnakeY[0] == ya){
+    if(Snake[0].x == xa && Snake[0].y == ya){
       xa = random(0,7);
       ya = random(0,7);
       length += 1;
@@ -89,11 +95,11 @@ void loop() {
   }
   else{
     for(int i = 0; i < length; i++){
-      lc.setLed(0, SnakeX[i], SnakeY[i], false);
+      lc.setLed(0, Snake[i].x, Snake[i].y, false);
     }
     delay(200);
     for(int i = 0; i<length; i++){
-      lc.setLed(0, SnakeX[i], SnakeY[i], true);
+      lc.setLed(0, Snake[i].x, Snake[i].y, true);
     }
     delay(200);
   }
